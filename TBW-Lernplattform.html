@@ -4911,6 +4911,7 @@ flowchart TD
   CEO["Sprecher der GF (CEO)"]
   CFO["Kaufm. GF (CFO)"]
   CTO["Techn. GF (CTO)"]
+  WL["Werksleiter"]
 
   CTRL["Controlling"]
   FIBU["Finanz- und Rechnungswesen"]
@@ -4922,14 +4923,30 @@ flowchart TD
   EKT["Einkauf operativ"]
   PL["Produktionsleitung"]
   AV["Arbeitsvorbereitung"]
+  FERT["Fertigung"]
+  PRUEF["Prüffeld / Test"]
+  SERV["Service / Kundendienst"]
+  INST["Instandhaltung"]
+  PROC["Process Engineer"]
   FL["Fertigungsleitung"]
   MS["Meister / Schicht"]
   BEL["Belegschaft Fertigung"]
   QM["Qualitätsmanagement"]
   LOG["Logistik"]
   DEV["F und E (Development)"]
+  ENTW["Entwicklung / Konstruktion"]
   PJL["Projektleiter"]
   ING["Konstrukteure / Ingenieure"]
+  QMB["QM-Beauftragter"]
+  SIFA["Fachkraft f. Arbeitssicherheit"]
+  SIB["Sicherheitsbeauftragter"]
+  UMB["Umweltbeauftragter"]
+  EMB["Energiemanagementbeauftragter"]
+  BSB["Brandschutzbeauftragter"]
+  GGB["Gefahrgutbeauftragter"]
+  SSB["Strahlenschutzbeauftragter"]
+  LSB["Laserschutzbeauftragter"]
+  DSB["Datenschutzbeauftragter"]
   
   MKL["Marketingleitung"]
   PM["Produktmanager"]
@@ -4958,16 +4975,34 @@ flowchart TD
   EKL --> EKS
   EKL --> EKT
 
-  CTO --> PL
+  CTO --> WL
+  WL --> PL
   PL --> AV
-  AV --> FL
+  PL --> FERT
+  PL --> PRUEF
+  PL --> SERV
+  FERT --> FL
   FL --> MS
   MS --> BEL
+  WL --> INST
+  WL --> PROC
   CTO --> QM
   CTO --> LOG
   CTO --> DEV
+  DEV --> ENTW
   DEV --> PJL
   PJL --> ING
+
+  QMB -.-> CEO
+  SIFA -.-> WL
+  SIB -.-> SIFA
+  UMB -.-> WL
+  EMB -.-> WL
+  BSB -.-> WL
+  GGB -.-> WL
+  SSB -.-> WL
+  LSB -.-> WL
+  DSB -.-> CEO
 
   CEO --> MKL
   MKL --> PM
@@ -5086,6 +5121,7 @@ flowchart TD
 }
 .kpi-chip.lvl-hoch { background: rgba(90, 75, 158, 0.4); color: #e6e0ff; border-color: rgba(90, 75, 158, 0.8); }
 .kpi-chip.lvl-mittel { background: rgba(64, 89, 115, 0.4); color: #d0e5ff; border-color: rgba(64, 89, 115, 0.8); }
+.kpi-chip.lvl-niedrig { background: rgba(90, 100, 120, 0.22); color: #b9c4d4; border-color: rgba(90, 100, 120, 0.5); }
 
 /* Filter Active States */
 .filtering-active .orga-card {
@@ -5165,14 +5201,15 @@ flowchart TD
 <script>
 (function(){
 
-var ALL_KPIS = ["Liquidität 2. Grades", "Liquidität 3. Grades", "Working Capital", "Eigenkapitalrentabilität", "Gesamtkapitalrentabilität", "Leverage-Effekt", "Umsatzrentabilität", "Return on Investment (RoI)", "Return on Capital Employed (ROCE)", "Wirtschaftlichkeit", "Eigenkapitalquote", "Verschuldungsgrad", "Anlagendeckungsgrad I", "Anlagendeckungsgrad II", "Anlagendeckungsgrad III", "Anlagenintensität", "Cashflow", "Schuldentilgungsdauer", "Effektivzinssatz", "Kapitalbedarfsrechnung", "Annuitätendarlehen", "Bilanzkurs", "Bezugsverhältnis / Emissionskurs / Mischkurs", "Lohmann-Ruchti-Effekt", "Kostenvergleichsrechnung", "Kritische Menge", "Gewinnvergleichsrechnung", "Rentabilitätsrechnung (statisch)", "Amortisationsrechnung", "Kapitalwertmethode", "Kostenbarwert", "Dynamische Amortisationsrechnung", "Interner Zinsfuß", "Optimale Nutzungsdauer (dynamisch)", "Annuitätenmethode", "Kritischer Verkaufspreis / kritische Menge (dynamisch)", "Lagerumschlagshäufigkeit", "Durchschnittlicher Lagerbestand", "Durchschnittliche Lagerreichweite", "Kapitalbindung im Lager", "Meldebestand", "Höchstbestand", "Optimale Bestellmenge", "Lagerkostensatz / Lagerzinssatz / Lagerhaltungskostensatz", "ABC- / ABC-XYZ-Analyse", "Servicegrad", "Erforderliche Lagerkapazität", "Rahmenvertragsquote", "Durchlaufzeit", "Kapazitätsauslastung", "Anlagenverfügbarkeit", "Produktivität", "Gesamtanlageneffizienz", "Energieeffizienz", "Deckungsbeitrag", "Deckungsbeitragsquote", "Relativer Deckungsbeitrag", "Break-Even-Punkt", "Kritische Menge / Grenzmenge", "Stückkosten", "EBITDA", "Ausschussquote", "Termintreue", "Reklamations-/Beschwerdequote", "Marktanteil / relativer Marktanteil", "Umsatzwachstumsrate", "Hitrate", "Verlorene Aufträge", "Fluktuationsquote", "Fehlzeiten-/Krankheitsquote", "Überstundenquote", "Personalentwicklungsintensität", "Quantitativer Personalbedarf", "Unfallrate", "Verbesserungsvorschläge je Mitarbeiter", "Personalabbauquote", "Zielerreichungsgrad", "Lohnstückkosten", "IT-Kosteneinsparquote", "Verfügbarkeit / Hochverfügbarkeit", "Nutzwertanalyse", "Kosten-Nutzen-Analyse", "Kennzahlensystem im strategischen Frühwarnsystem", "Projekt-Scorecard", "Service-Level-Kennzahlen", "Marktpotenzial"];
+var ALL_KPIS = ["Liquidität 2. Grades", "Liquidität 3. Grades", "Working Capital", "Eigenkapitalrentabilität", "Gesamtkapitalrentabilität", "Leverage-Effekt", "Umsatzrentabilität", "Return on Investment (RoI)", "Return on Capital Employed (ROCE)", "Wirtschaftlichkeit", "Eigenkapitalquote", "Verschuldungsgrad", "Anlagendeckungsgrad I", "Anlagendeckungsgrad II", "Anlagendeckungsgrad III", "Anlagenintensität", "Cashflow", "Schuldentilgungsdauer", "Effektivzinssatz", "Kapitalbedarfsrechnung", "Annuitätendarlehen", "Bilanzkurs", "Bezugsverhältnis / Emissionskurs / Mischkurs", "Lohmann-Ruchti-Effekt", "Kostenvergleichsrechnung", "Kritische Menge", "Gewinnvergleichsrechnung", "Rentabilitätsrechnung (statisch)", "Amortisationsrechnung", "Kapitalwertmethode", "Kostenbarwert", "Dynamische Amortisationsrechnung", "Interner Zinsfuß", "Optimale Nutzungsdauer (dynamisch)", "Annuitätenmethode", "Kritischer Verkaufspreis / kritische Menge (dynamisch)", "Lagerumschlagshäufigkeit", "Durchschnittlicher Lagerbestand", "Durchschnittliche Lagerreichweite", "Kapitalbindung im Lager", "Meldebestand", "Höchstbestand", "Optimale Bestellmenge", "Lagerkostensatz / Lagerzinssatz / Lagerhaltungskostensatz", "ABC- / ABC-XYZ-Analyse", "Servicegrad", "Erforderliche Lagerkapazität", "Rahmenvertragsquote", "Durchlaufzeit", "Kapazitätsauslastung", "Anlagenverfügbarkeit", "Produktivität", "Gesamtanlageneffizienz", "Energieeffizienz", "Deckungsbeitrag", "Deckungsbeitragsquote", "Relativer Deckungsbeitrag", "Break-Even-Punkt", "Kritische Menge / Grenzmenge", "Stückkosten", "EBITDA", "Ausschussquote", "Termintreue", "Reklamations-/Beschwerdequote", "Marktanteil / relativer Marktanteil", "Umsatzwachstumsrate", "Hitrate", "Verlorene Aufträge", "Fluktuationsquote", "Fehlzeiten-/Krankheitsquote", "Überstundenquote", "Personalentwicklungsintensität", "Quantitativer Personalbedarf", "Unfallrate", "Verbesserungsvorschläge je Mitarbeiter", "Personalabbauquote", "Zielerreichungsgrad", "Lohnstückkosten", "IT-Kosteneinsparquote", "Verfügbarkeit / Hochverfügbarkeit", "Nutzwertanalyse", "Kosten-Nutzen-Analyse", "Kennzahlensystem im strategischen Frühwarnsystem", "Projekt-Scorecard", "Service-Level-Kennzahlen", "Marktpotenzial", "WIP (Work in Progress)", "Cycle Time", "Tool Performance", "Bottleneck Utilization", "Throughput", "Yield (Ausbeute)", "Rework Rate", "OTD (On-Time Delivery)", "Move Targets"];
 
 var ORGA_GROUPS = {
   'ext': 'Externe Stakeholder & Betriebsrat',
   'gf': 'Beirat & Geschäftsführung',
   'op1': 'Einkauf, Produktion & Logistik',
   'op2': 'Marketing, Vertrieb & HR',
-  'admin': 'Finanzen, Controlling & IT'
+  'admin': 'Finanzen, Controlling & IT',
+  'ba': 'Beauftragte & Stabsstellen'
 };
 
 var KPI_INFO = {
@@ -5261,7 +5298,16 @@ var KPI_INFO = {
   "kennzahlensystem-im-strategischen-fr-hwarnsystem": {name: "Kennzahlensystem im strategischen Frühwarnsystem", syn: "", formula: "kein Einzelwert — Verbund verknüpfter Kennzahlen (u. a. Return on Sales, ROCE, Liefertreue, verlorene Aufträge)", aussage: "Dient der frühzeitigen Identifikation, Diagnose und Bewertung strategischer Veränderungen im Unternehmen.", fach: ["MUF2"]},
   "projekt-scorecard": {name: "Projekt-Scorecard", syn: "", formula: "kein Einzelwert — mehrdimensionales Raster (Ressourcen, Termine, Budget, Qualität, Nutzen/Risiko) je Projekt", aussage: "Standardisiertes Bewertungs- und Steuerungsinstrument für mehrere Projekte im Multiprojektmanagement (Balanced-Scorecard-Logik auf Projektebene).", fach: ["MUF2"]},
   "service-level-kennzahlen": {name: "Service-Level-Kennzahlen", syn: "", formula: "z. B. Anzahl betreuter Nutzer/Systeme, Reaktionszeit, Ø-Betreuungsaufwand je Platz", aussage: "Festlegung und Kontrolle von Qualität und Umfang vertraglich vereinbarter IT-Dienstleistungen (SLA).", fach: ["MUF1"]},
-  "marktpotenzial": {name: "Marktpotenzial", syn: "", formula: "Marktpotenzial = Einwohner Einzugsgebiet &times; Kaufkraft je Kopf + Kaufkraftzuflüsse aus anderen Einzugsgebieten − Kaufkraftabflüsse in andere Einzugsgebiete", aussage: "Maximal mögliche Absatzmenge/-höhe eines Marktes bei vollständiger Marktausschöpfung. Bezugsgröße für den Marktsättigungsgrad (Marktvolumen / Marktpotenzial &times; 100) und damit zentral für die Einschätzung verbleibender Wachstumsspielräume.", fach: ["MPA"]}
+  "marktpotenzial": {name: "Marktpotenzial", syn: "", formula: "Marktpotenzial = Einwohner Einzugsgebiet &times; Kaufkraft je Kopf + Kaufkraftzuflüsse aus anderen Einzugsgebieten − Kaufkraftabflüsse in andere Einzugsgebiete", aussage: "Maximal mögliche Absatzmenge/-höhe eines Marktes bei vollständiger Marktausschöpfung. Bezugsgröße für den Marktsättigungsgrad (Marktvolumen / Marktpotenzial &times; 100) und damit zentral für die Einschätzung verbleibender Wachstumsspielräume.", fach: ["MPA"]},
+  "wip-work-in-progress-": {name: "WIP (Work in Progress)", syn: "Umlaufbestand, unfertige Erzeugnisse in der Fertigung", formula: "Σ aller unfertigen Einheiten (Wafer/Lose) in der Fertigung\n  ≡ nach Little's Law: Durchsatz × Durchlaufzeit", aussage: "Optimal: genug Material als Puffer, damit teure Anlagen nicht leerlaufen (Starvation). Zu hoch: Staus vor Engpässen, lange Wartezeiten und hohe Kapitalbindung. Typische Datenquelle: MES/ERP.", fach: ["MPA", "FAB"]},
+  "cycle-time": {name: "Cycle Time", syn: "Zykluszeit, Durchlaufzeit eines Loses", formula: "Endzeitpunkt − Startzeitpunkt (je Los/Wafer vom Start bis zur Fertigstellung)", aussage: "Niedrig ist gut: Produkte sind schneller beim Kunden, die Fabrik reagiert agiler auf Aufträge. Hoch deutet auf Staus, Anlagenprobleme oder zu hohen WIP hin. Datenquelle: MES/Shop Floor Control.", fach: ["MPA", "FAB"]},
+  "tool-performance": {name: "Tool Performance", syn: "Anlagenleistung", formula: "(Produktive Zeit / Geplante Produktionszeit) × 100", aussage: "Hoch ist gut: die Anlage arbeitet zuverlässig und wertschöpfend. Niedrig heißt: die Anlage ist häufig in Wartung (Down) oder wartet auf Bediener/Material (Idle). Datenquelle: EAP (Equipment Automation Program), MES.", fach: ["MPA", "FAB"]},
+  "bottleneck-utilization": {name: "Bottleneck Utilization", syn: "Engpass-Auslastung", formula: "(Produktive Zeit des Engpasses / Verfügbare Zeit des Engpasses) × 100", aussage: "Nahe 100 % ist gut: Der Engpass diktiert Takt und Umsatz des gesamten Werks und darf deshalb nie stillstehen. Schlecht ist, wenn der Engpass auf Material wartet (Starvation).", fach: ["MPA", "FAB"]},
+  "throughput": {name: "Throughput", syn: "Durchsatz, Wafer per Hour (WPH)", formula: "Produzierte Einheiten / Zeiteinheit (z. B. Wafer pro Stunde oder Tag)", aussage: "Gut, wenn der geplante Zielwert erreicht oder übertroffen wird. Unter Plan führt es unmittelbar zu Lieferverzügen. Datenquelle: MES.", fach: ["MPA", "FAB"]},
+  "yield-ausbeute-": {name: "Yield (Ausbeute)", syn: "Ausbeute, Gutausbeute", formula: "(Fehlerfreie Einheiten / Gestartete Einheiten) × 100", aussage: "Nahe 100 % ist gut: kaum Ausschuss, hohe Profitabilität — besonders wichtig bei teuren Werkstücken. Niedrig bedeutet hohe Kosten durch Scrap und komplett verschwendete Anlagenkapazität. Gegenstück zur Ausschussquote.", fach: ["MPA", "FAB"]},
+  "rework-rate": {name: "Rework Rate", syn: "Nacharbeitsquote", formula: "(Nachgearbeitete Einheiten / Gesamt bearbeitete Einheiten) × 100", aussage: "Niedrig ist gut: die Prozesse sind stabil. Hoch bindet völlig ungeplant Anlagenkapazität und stört die Produktionsplanung massiv. Datenquelle: MES/QMS.", fach: ["MPA", "FAB"]},
+  "otd-on-time-delivery-": {name: "OTD (On-Time Delivery)", syn: "Liefertreue, Termintreue (Supply Chain)", formula: "(Pünktlich gelieferte Lose / Gesamtzahl Lose) × 100", aussage: "Nahe 100 % ist gut: Kunden bzw. nachgelagerte Werke erhalten die Produkte exakt zum zugesagten Termin. Niedrige Werte gefährden die Supply Chain und können Vertragsstrafen auslösen. Datenquelle: ERP/MES.", fach: ["MPA", "FAB"]},
+  "move-targets": {name: "Move Targets", syn: "Bewegungsziele, Moves pro Schicht", formula: "Tatsächliche Moves / Geplante Moves je Schicht", aussage: "100 % Zielerreichung heißt: die Schicht hat genau das geliefert, was der Plan vorgegeben hat. Signifikante Abweichungen machen die Schicht- und Kapazitätsplanung unberechenbar. Datenquelle: MES/Dispatching-Systeme.", fach: ["MPA", "FAB"]},
 };
 
 var ROLE_INFO = {
@@ -5289,7 +5335,24 @@ var ROLE_INFO = {
   "fibu": "Verantwortet die externe Rechnungslegung (Bilanz, GuV) sowie die Innenfinanzierung. Zentrale Kennzahlen betreffen die fristenkongruente Finanzierung des Anlagevermögens (Anlagendeckungsgrad) und die Innenfinanzierungskraft (Schuldentilgungsdauer).",
   "itl": "Verantwortet die IT-Infrastruktur und -Systeme des Unternehmens. Zentrale Kennzahlen sind die System-Hochverfügbarkeit, die Wirtschaftlichkeit von IT-Investitionen (IT-Kosteneinsparquote) und vertraglich vereinbarte Service-Level.",
   "pm": "Verantwortet ein Produkt oder eine Produktlinie über den gesamten Lebenszyklus hinweg — von der Markteinführung bis zur Marktausschöpfung. Bewertet dazu insbesondere das noch erschließbare Marktpotenzial, den erreichten Marktanteil und die Profitabilität (Deckungsbeitragsquote) des eigenen Produkts.",
-  "av": "Plant und steuert die Fertigung im Vorfeld der eigentlichen Produktion — Kapazitätsplanung, Maschinenbelegung, Arbeitspläne und Stücklisten. Wird an der Qualität ihrer Planung über die tatsächlich erreichte Kapazitätsauslastung, Durchlaufzeit und Anlagenverfügbarkeit gemessen."
+  "av": "Plant und steuert die Fertigung im Vorfeld der eigentlichen Produktion — Kapazitätsplanung, Maschinenbelegung, Arbeitspläne und Stücklisten. Wird an der Qualität ihrer Planung über die tatsächlich erreichte Kapazitätsauslastung, Durchlaufzeit und Anlagenverfügbarkeit gemessen.",
+  "wl": "Leitet das gesamte Werk operativ und verantwortet Output, Kosten, Qualität und Arbeitssicherheit am Standort. Schnittstelle zwischen Geschäftsführung und den operativen Bereichen; steuert über aggregierte Fertigungskennzahlen wie OEE, Auslastung, Durchsatz und Liefertreue.",
+  "fert": "Führt die eigentliche Wertschöpfung an den Anlagen aus. Verantwortet die Erfüllung der Schichtziele (Moves), den Durchsatz und die unmittelbare Prozessqualität an der Linie.",
+  "pruef": "Prüft und misst Produkte bzw. Wafer nach definierten Prüfplänen (Endtest, Parametertest). Liefert die Datenbasis für Ausbeute (Yield), Ausschuss und Nacharbeit und entscheidet über Freigabe oder Sperrung von Losen.",
+  "serv": "Technischer Service und Kundendienst nach der Auslieferung: Inbetriebnahme, Störungsbehebung, Ersatzteilversorgung und Reklamationsbearbeitung beim Kunden. Direkter Einfluss auf wahrgenommene Liefer- und Servicequalität.",
+  "inst": "Verantwortet die Verfügbarkeit der Produktionsanlagen: vorbeugende Wartung, Instandsetzung und Ersatzteilmanagement. Zentrale Stellgröße für Anlagenverfügbarkeit, Tool Performance und damit für die Gesamtanlageneffizienz.",
+  "proc": "Betreut und optimiert einzelne Fertigungsprozesse technisch (Prozessparameter, Rezepte, Prozessfähigkeit). Analysiert Ausbeuteverluste und Nacharbeit und führt Prozessverbesserungen ein — Bindeglied zwischen Entwicklung, Fertigung und Qualitätsmanagement.",
+  "entw": "Konstruiert und entwickelt Produkte bzw. Prozesse bis zur Serienreife. Trifft dabei Entscheidungen, die den späteren Stückkostenanteil maßgeblich festlegen (Design-to-Cost), und bewertet Entwicklungsprojekte mit Investitionsrechenverfahren.",
+  "qmb": "Beauftragter der obersten Leitung für das Qualitätsmanagementsystem (z. B. nach DIN EN ISO 9001). Überwacht Wirksamkeit und Weiterentwicklung des QM-Systems, bereitet Audits vor und berichtet direkt an die Geschäftsführung.",
+  "umb": "Betrieblicher Umweltbeauftragter (u. a. Abfall-, Immissionsschutz- und Gewässerschutzbeauftragter nach BImSchG/KrWG/WHG). Überwacht die Einhaltung umweltrechtlicher Pflichten und wirkt auf ressourcenschonende Verfahren hin.",
+  "emb": "Verantwortet das Energiemanagementsystem (z. B. nach DIN EN ISO 50001): erfasst Energieverbräuche, identifiziert Einsparpotenziale und steuert Maßnahmen zur Verbesserung der Energieeffizienz.",
+  "sifa": "Fachkraft für Arbeitssicherheit nach dem Arbeitssicherheitsgesetz (ASiG). Berät Arbeitgeber und Führungskräfte bei Gefährdungsbeurteilungen, Unfallverhütung und sicherheitsgerechter Gestaltung von Arbeitsplätzen und Anlagen.",
+  "sib": "Sicherheitsbeauftragter nach § 22 SGB VII. Ehrenamtlich neben der eigentlichen Tätigkeit tätig; unterstützt Vorgesetzte und Kollegen unmittelbar vor Ort bei der Unfallverhütung und meldet erkannte Gefährdungen.",
+  "bsb": "Brandschutzbeauftragter (Aufgaben nach DGUV Information 205-003). Verantwortet vorbeugenden und organisatorischen Brandschutz, Brandschutzordnung, Räumungsübungen und die Prüfung von Brandschutzeinrichtungen.",
+  "ggb": "Gefahrgutbeauftragter nach GbV/ADR. Überwacht die Einhaltung der Vorschriften beim Transport gefährlicher Güter, schult Beteiligte und erstellt den jährlichen Gefahrgutbericht.",
+  "ssb": "Strahlenschutzbeauftragter nach Strahlenschutzgesetz/-verordnung. In der Halbleiterfertigung insbesondere relevant für Anlagen mit ionisierender Strahlung (z. B. Ionenimplantation, Röntgenprüfung); überwacht Dosisgrenzwerte und Schutzmaßnahmen.",
+  "lsb": "Laserschutzbeauftragter nach OStrV/DGUV Vorschrift 11. Erforderlich beim Betrieb von Lasereinrichtungen der Klassen 3R, 3B und 4 (z. B. Laser-Trimmen, Markieren, Messtechnik); überwacht die Schutzmaßnahmen am Laserarbeitsplatz.",
+  "dsb": "Datenschutzbeauftragter nach Art. 37 ff. DSGVO / § 38 BDSG. Überwacht die Einhaltung des Datenschutzes, berät bei Verarbeitungsverzeichnissen und Datenschutz-Folgenabschätzungen und ist Anlaufstelle für Aufsichtsbehörde und Betroffene.",
 };
 
 var ORGA_ROLES = [
@@ -5305,7 +5368,7 @@ var ORGA_ROLES = [
   { id: "cfo", group: "gf", name: "Kaufm. GF (CFO)", kpis: [{"n": "Liquidität 2. Grades", "l": "hoch"}, {"n": "Liquidität 3. Grades", "l": "hoch"}, {"n": "Eigenkapitalrentabilität", "l": "hoch"}, {"n": "Leverage-Effekt", "l": "hoch"}, {"n": "Return on Capital Employed (ROCE)", "l": "hoch"}, {"n": "Eigenkapitalquote", "l": "hoch"}, {"n": "Verschuldungsgrad", "l": "hoch"}, {"n": "Cashflow", "l": "hoch"}, {"n": "Effektivzinssatz", "l": "mittel"}, {"n": "Kapitalbedarfsrechnung", "l": "mittel"}, {"n": "Annuitätendarlehen", "l": "mittel"}, {"n": "Bilanzkurs", "l": "mittel"}, {"n": "Lohmann-Ruchti-Effekt", "l": "mittel"}, {"n": "Kostenvergleichsrechnung", "l": "mittel"}, {"n": "Kritische Menge", "l": "mittel"}, {"n": "Gewinnvergleichsrechnung", "l": "mittel"}, {"n": "Rentabilitätsrechnung (statisch)", "l": "mittel"}, {"n": "Kostenbarwert", "l": "mittel"}, {"n": "Interner Zinsfuß", "l": "mittel"}, {"n": "Optimale Nutzungsdauer (dynamisch)", "l": "mittel"}, {"n": "Annuitätenmethode", "l": "mittel"}, {"n": "Kritischer Verkaufspreis / kritische Menge (dynamisch)", "l": "mittel"}, {"n": "Kennzahlensystem im strategischen Frühwarnsystem", "l": "mittel"}, {"n": "Bezugsverhältnis / Emissionskurs / Mischkurs", "l": "mittel"}] },
   { id: "cto", group: "gf", name: "Techn. GF (CTO)", kpis: [{"n": "Kapazitätsauslastung", "l": "mittel"}, {"n": "Gesamtanlageneffizienz", "l": "mittel"}, {"n": "Ausschussquote", "l": "mittel"}, {"n": "Durchlaufzeit", "l": "mittel"}] },
   { id: "ekl", group: "op1", name: "Einkauf", kpis: [{"n": "Lagerumschlagshäufigkeit", "l": "hoch"}, {"n": "Durchschnittlicher Lagerbestand", "l": "hoch"}, {"n": "Durchschnittliche Lagerreichweite", "l": "hoch"}, {"n": "Kapitalbindung im Lager", "l": "hoch"}, {"n": "Optimale Bestellmenge", "l": "hoch"}, {"n": "Lagerkostensatz / Lagerzinssatz / Lagerhaltungskostensatz", "l": "hoch"}, {"n": "Erforderliche Lagerkapazität", "l": "hoch"}, {"n": "Rahmenvertragsquote", "l": "hoch"}, {"n": "Meldebestand", "l": "hoch"}, {"n": "Höchstbestand", "l": "hoch"}, {"n": "ABC- / ABC-XYZ-Analyse", "l": "hoch"}] },
-  { id: "pl", group: "op1", name: "Produktion / Fertigung", kpis: [{"n": "Erforderliche Lagerkapazität", "l": "hoch"}, {"n": "Durchlaufzeit", "l": "hoch"}, {"n": "Kapazitätsauslastung", "l": "hoch"}, {"n": "Ausschussquote", "l": "hoch"}, {"n": "Produktivität", "l": "hoch"}, {"n": "Gesamtanlageneffizienz", "l": "hoch"}, {"n": "Anlagenverfügbarkeit", "l": "hoch"}] },
+  { id: "pl", group: "op1", name: "Produktionsleitung", kpis: [{"n": "Erforderliche Lagerkapazität", "l": "hoch"}, {"n": "Durchlaufzeit", "l": "hoch"}, {"n": "Kapazitätsauslastung", "l": "hoch"}, {"n": "Ausschussquote", "l": "hoch"}, {"n": "Produktivität", "l": "hoch"}, {"n": "Gesamtanlageneffizienz", "l": "hoch"}, {"n": "Anlagenverfügbarkeit", "l": "hoch"}] },
   { id: "qm", group: "op1", name: "Qualitätsmanagement", kpis: [{"n": "Ausschussquote", "l": "hoch"}, {"n": "Reklamations-/Beschwerdequote", "l": "hoch"}] },
   { id: "log", group: "op1", name: "Logistik", kpis: [{"n": "Servicegrad", "l": "hoch"}] },
   { id: "dev", group: "op1", name: "Forschung & Entwicklung", kpis: [{"n": "Return on Investment (RoI)", "l": "hoch"}, {"n": "Amortisationsrechnung", "l": "hoch"}, {"n": "Kapitalwertmethode", "l": "hoch"}, {"n": "Dynamische Amortisationsrechnung", "l": "hoch"}, {"n": "Nutzwertanalyse", "l": "hoch"}] },
@@ -5317,7 +5380,24 @@ var ORGA_ROLES = [
   { id: "fibu", group: "admin", name: "Finanz- & Rechnungswesen", kpis: [{"n": "Working Capital", "l": "hoch"}, {"n": "Anlagendeckungsgrad I", "l": "hoch"}, {"n": "Anlagendeckungsgrad II", "l": "hoch"}, {"n": "Anlagendeckungsgrad III", "l": "hoch"}, {"n": "Anlagenintensität", "l": "hoch"}, {"n": "Schuldentilgungsdauer", "l": "hoch"}] },
   { id: "itl", group: "admin", name: "IT-Leitung", kpis: [{"n": "IT-Kosteneinsparquote", "l": "hoch"}, {"n": "Verfügbarkeit / Hochverfügbarkeit", "l": "hoch"}, {"n": "Service-Level-Kennzahlen", "l": "hoch"}] },
   { id: "pm", group: "op2", name: "Produktmanager", kpis: [{"n": "Marktpotenzial", "l": "hoch"}, {"n": "Marktanteil / relativer Marktanteil", "l": "hoch"}, {"n": "Deckungsbeitragsquote", "l": "mittel"}, {"n": "Umsatzwachstumsrate", "l": "mittel"}] },
-  { id: "av", group: "op1", name: "Arbeitsvorbereitung", kpis: [{"n": "Kapazitätsauslastung", "l": "hoch"}, {"n": "Durchlaufzeit", "l": "hoch"}, {"n": "Anlagenverfügbarkeit", "l": "mittel"}] }
+  { id: "av", group: "op1", name: "Arbeitsvorbereitung", kpis: [{"n": "Kapazitätsauslastung", "l": "hoch"}, {"n": "Durchlaufzeit", "l": "hoch"}, {"n": "Anlagenverfügbarkeit", "l": "mittel"}] },
+  { id: "wl", group: "gf", name: "Werksleiter (Plant Manager)", kpis: [{"n": "Gesamtanlageneffizienz", "l": "hoch"}, {"n": "Kapazitätsauslastung", "l": "hoch"}, {"n": "Throughput", "l": "hoch"}, {"n": "OTD (On-Time Delivery)", "l": "hoch"}, {"n": "Yield (Ausbeute)", "l": "hoch"}, {"n": "Cycle Time", "l": "mittel"}, {"n": "Unfallrate", "l": "mittel"}] },
+  { id: "fert", group: "op1", name: "Fertigung", kpis: [{"n": "Move Targets", "l": "hoch"}, {"n": "Throughput", "l": "hoch"}, {"n": "Ausschussquote", "l": "hoch"}, {"n": "Yield (Ausbeute)", "l": "mittel"}, {"n": "Cycle Time", "l": "mittel"}, {"n": "WIP (Work in Progress)", "l": "mittel"}] },
+  { id: "pruef", group: "op1", name: "Prüffeld / Test", kpis: [{"n": "Yield (Ausbeute)", "l": "hoch"}, {"n": "Ausschussquote", "l": "hoch"}, {"n": "Rework Rate", "l": "hoch"}, {"n": "Reklamations-/Beschwerdequote", "l": "mittel"}, {"n": "Termintreue", "l": "mittel"}] },
+  { id: "serv", group: "op1", name: "Service / Kundendienst", kpis: [{"n": "Termintreue", "l": "hoch"}, {"n": "OTD (On-Time Delivery)", "l": "hoch"}, {"n": "Reklamations-/Beschwerdequote", "l": "hoch"}, {"n": "Servicegrad", "l": "hoch"}, {"n": "Service-Level-Kennzahlen", "l": "mittel"}] },
+  { id: "inst", group: "op1", name: "Instandhaltung", kpis: [{"n": "Anlagenverfügbarkeit", "l": "hoch"}, {"n": "Tool Performance", "l": "hoch"}, {"n": "Gesamtanlageneffizienz", "l": "hoch"}, {"n": "Bottleneck Utilization", "l": "mittel"}, {"n": "Unfallrate", "l": "niedrig"}] },
+  { id: "proc", group: "op1", name: "Process Engineer", kpis: [{"n": "Yield (Ausbeute)", "l": "hoch"}, {"n": "Rework Rate", "l": "hoch"}, {"n": "Tool Performance", "l": "hoch"}, {"n": "Ausschussquote", "l": "hoch"}, {"n": "Cycle Time", "l": "mittel"}, {"n": "Gesamtanlageneffizienz", "l": "mittel"}] },
+  { id: "entw", group: "op1", name: "Entwicklung / Konstruktion", kpis: [{"n": "Stückkosten", "l": "hoch"}, {"n": "Kapitalwertmethode", "l": "mittel"}, {"n": "Amortisationsrechnung", "l": "mittel"}, {"n": "Nutzwertanalyse", "l": "mittel"}, {"n": "Durchlaufzeit", "l": "niedrig"}] },
+  { id: "qmb", group: "ba", name: "Qualitätsmanagementbeauftragter (QMB)", kpis: [{"n": "Ausschussquote", "l": "hoch"}, {"n": "Reklamations-/Beschwerdequote", "l": "hoch"}, {"n": "Yield (Ausbeute)", "l": "hoch"}, {"n": "Rework Rate", "l": "hoch"}, {"n": "Termintreue", "l": "mittel"}] },
+  { id: "umb", group: "ba", name: "Umweltbeauftragter", kpis: [{"n": "Energieeffizienz", "l": "hoch"}] },
+  { id: "emb", group: "ba", name: "Energiemanagementbeauftragter", kpis: [{"n": "Energieeffizienz", "l": "hoch"}, {"n": "Kapazitätsauslastung", "l": "niedrig"}] },
+  { id: "sifa", group: "ba", name: "Fachkraft für Arbeitssicherheit (SiFa)", kpis: [{"n": "Unfallrate", "l": "hoch"}, {"n": "Fehlzeiten-/Krankheitsquote", "l": "mittel"}] },
+  { id: "sib", group: "ba", name: "Sicherheitsbeauftragter", kpis: [{"n": "Unfallrate", "l": "hoch"}, {"n": "Verbesserungsvorschläge je Mitarbeiter", "l": "niedrig"}] },
+  { id: "bsb", group: "ba", name: "Brandschutzbeauftragter", kpis: [{"n": "Unfallrate", "l": "mittel"}] },
+  { id: "ggb", group: "ba", name: "Gefahrgutbeauftragter", kpis: [{"n": "Unfallrate", "l": "mittel"}] },
+  { id: "ssb", group: "ba", name: "Strahlenschutzbeauftragter", kpis: [{"n": "Unfallrate", "l": "mittel"}] },
+  { id: "lsb", group: "ba", name: "Laserschutzbeauftragter", kpis: [{"n": "Unfallrate", "l": "mittel"}] },
+  { id: "dsb", group: "ba", name: "Datenschutzbeauftragter", kpis: [{"n": "Verfügbarkeit / Hochverfügbarkeit", "l": "mittel"}, {"n": "Service-Level-Kennzahlen", "l": "niedrig"}] },
 ];
 
 
